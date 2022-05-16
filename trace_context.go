@@ -8,8 +8,10 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-// contextKey is used for context value
-var contextKey struct{}
+type contextKey struct{}
+
+// key is used for context value
+var key contextKey
 
 // CtxKeyTid is inserted trace id on the beginning of the request
 const (
@@ -38,7 +40,7 @@ func MustGetTraceContext(ctx context.Context) *TraceContext {
 }
 
 func GetTraceContext(ctx context.Context) (traceCtx *TraceContext, ok bool) {
-	traceCtx, ok = ctx.Value(contextKey).(*TraceContext)
+	traceCtx, ok = ctx.Value(key).(*TraceContext)
 	ok = ok && traceCtx.IsValid()
 	return
 }
@@ -66,7 +68,7 @@ func (b *TraceContext) EmbedIntoContext(ctx context.Context) (context.Context, e
 	if !b.IsValid() {
 		return nil, ErrInvalidTraceContext
 	}
-	return context.WithValue(ctx, contextKey, b), nil
+	return context.WithValue(ctx, key, b), nil
 }
 
 func ExtractTraceContextFromHeader(h http.Header) (b TraceContext) {
