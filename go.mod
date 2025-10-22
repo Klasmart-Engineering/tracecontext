@@ -1,4 +1,4 @@
-module github.com/KL-Engineering/tracecontext
+module github.com/Klasmart-Engineering/tracecontext
 
 go 1.18
 
